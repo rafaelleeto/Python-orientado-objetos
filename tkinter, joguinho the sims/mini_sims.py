@@ -2,6 +2,19 @@ import tkinter as tk
 import random
 
 
+class Trabalho:
+    def __init__(self, nome, salario):
+        self.nome = nome
+        self.salario = salario
+
+    def inserir_trabalho(self, nome_trabalho, salario_nome):
+        self.nome = nome_trabalho
+        self.salario = salario_nome
+
+    def pegar_salario(self):
+        return self.salario
+
+
 class Personagem:
 
     def __init__(self, nome):
@@ -10,66 +23,54 @@ class Personagem:
         self.fome = 100
         self.energia = 100
         self.higiene = 100
-        self.trabalho = None
+        self.trabalho: Trabalho = None
         self.mental = 100
+        self.informacao = ""
 
     def trabalhar(self):
-        assalto = random.randint(1, 10)
+        assalto = random.randint(1, 1000)
         if assalto == 1:
             self.dinheiro = 0
             self.mental = min(100, self.mental - 10)
-            return ("VOCÊ FOI ASSALTADO E PERDEU TODO O DINHEIRO!")
+            self.informacao = f"{self.nome} Foi assaltado e perdeu todo o dinheiro"
         else:
-            self.dinheiro += 10
+            self.dinheiro += self.trabalho.salario
+            self.informacao = f"Você trabalhou e ganhou {self.dinheiro}"
             self.energia = max(0, self.energia - 10)
             self.higiene = max(0, self.higiene - 10)
             self.mental = max(0, self.mental - 10)
 
     def comer(self):
         if self.dinheiro < 10:
-            print(f"{self.nome} não tem dinheiro")
+            self.informacao = f"{self.nome} Não tem dinheiro"
         else:
+            self.informacao = "Você comeu!"
             self.dinheiro = min(100, self.dinheiro - 10)
             self.fome = min(100, self.fome - 10)
 
     def mostrar_propriedades(self):
-        return (f"Nome : {self.nome} | Dinheiro: {self.dinheiro} | Fome: {self.fome} | Energia:\
+        return (f"Nome : {self.nome} | Trabalho: {"" if self.trabalho is None else self.trabalho.nome} | Dinheiro: {self.dinheiro} | Fome: {self.fome} | Energia:\
     {self.energia} | Higiene: {self.higiene} | Mental: {self.mental}")
+
+    def mostrar_informaçoes(self):
+        return self.informacao
 
     def dormir(self):
         if self.higiene < 10:
-            print("Você não pode dormir sujo")
-            pass
+            self.informacao = "Você não pode dormir sujo"
         else:
+            self.informacao = "Você dormiu!"
             self.energia = min(100, self.energia + 10)
             self.fome = min(100, self.fome + 10)
             self.mental = min(100, self.mental + 10)
 
+    def emprego(self, trabalho):
+        self.trabalho = trabalho
+
     def tomar_banho(self):
-        self.higiene = min(100, self.higiene + 10)
+        self.informacao = "Você tomou banho"
+        self.higiene = min(100, self.higiene + 100)
 
 
 if __name__ == "__main__":
-    personagem = Personagem("rafael")
-    while True:
-        opcao = int(input("""Digite \n1- Comer\n2-Trabalhar\n3-Descansar\n4-Tomar Banho
-5- Mostrar Status\n"""))
-        match opcao:
-
-            case 1:
-                personagem.comer()
-
-            case 2:
-                personagem.trabalhar()
-
-            case 3:
-                personagem.dormir()
-
-            case 4:
-                personagem.tomar_banho()
-
-            case 5:
-                personagem.mostrar_propriedades()
-
-            case _:
-                break
+    pass
