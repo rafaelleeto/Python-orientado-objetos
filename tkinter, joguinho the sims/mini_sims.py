@@ -1,6 +1,10 @@
 import tkinter as tk
 import random
 
+emprego = {"pintor" : "15",
+           "físico" : "10",
+           "mecânico" : "20" }
+
 
 class Trabalho:
     def __init__(self, nome, salario):
@@ -28,17 +32,19 @@ class Personagem:
         self.informacao = ""
 
     def trabalhar(self):
-        assalto = random.randint(1, 1000)
+        assalto = random.randint(1, 10)
         if assalto == 1:
             self.dinheiro = 0
             self.mental = min(100, self.mental - 10)
             self.informacao = f"{self.nome} Foi assaltado e perdeu todo o dinheiro"
+            return True
         else:
             self.dinheiro += self.trabalho.salario
             self.informacao = f"Você trabalhou e ganhou {self.dinheiro}"
             self.energia = max(0, self.energia - 10)
             self.higiene = max(0, self.higiene - 10)
             self.mental = max(0, self.mental - 10)
+            return False
 
     def comer(self):
         if self.dinheiro < 10:
@@ -60,9 +66,9 @@ class Personagem:
             self.informacao = "Você não pode dormir sujo"
         else:
             self.informacao = "Você dormiu!"
-            self.energia = min(100, self.energia + 10)
+            self.energia = min(100, self.energia + 100)
             self.fome = min(100, self.fome + 10)
-            self.mental = min(100, self.mental + 10)
+            self.mental = min(100, self.mental + 100)
 
     def emprego(self, trabalho):
         self.trabalho = trabalho
@@ -70,6 +76,8 @@ class Personagem:
     def tomar_banho(self):
         self.informacao = "Você tomou banho"
         self.higiene = min(100, self.higiene + 100)
+
+
 
 
 if __name__ == "__main__":

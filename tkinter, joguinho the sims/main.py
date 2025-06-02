@@ -1,5 +1,8 @@
 import tkinter as tk
+from tkinter import messagebox
 from mini_sims import Personagem, Trabalho
+import random
+
 
 personagem = Personagem("Jose")
 
@@ -15,7 +18,14 @@ def comer():
 
 
 def trabalhar():
-    personagem.trabalhar()
+    if not personagem.trabalho:
+        messagebox.showinfo("Você não pode trabalhar","Você não tem um emprego, logo não pode trabalhar, escolha um emprego")
+        return 
+    if personagem.trabalhar() == True:
+        messagebox.showinfo("Você foi assaltado!","Um elemento mal intencionado te parou na rua e pegou todo o seu dinheiro!")
+    else:
+        pass
+    
     atualizar_label()
 
 
@@ -29,18 +39,17 @@ def tomar_banho():
     atualizar_label()
 
 
-def escolher_trabalho(emprego):
+def escolher_trabalho(emprego,janela_para_fechar):
+    dicionario = {"pintor" : 20,
+                  "mecânico" : 30,
+                  "físico" : 50}
     novo_trabalho = Trabalho(emprego, 0)
     personagem.trabalho = novo_trabalho
-    print(personagem.trabalho)
-    if emprego == "pintor":
-        novo_trabalho.inserir_trabalho(emprego, 20)
-
-    if emprego == "físico":
-        novo_trabalho.inserir_trabalho(emprego, 40)
-
-    if emprego == "mecânico":
-        novo_trabalho.inserir_trabalho(emprego, 50)
+    trabalhao = dicionario.get(emprego,0)
+    novo_trabalho.inserir_trabalho(emprego,trabalhao)
+    
+    janela_para_fechar.destroy()
+    messagebox.showinfo(f"TRABALHO ESCOLHIDO",f"Você escolheu o trabalho de: {emprego}")
 
     atualizar_label()
 
@@ -51,13 +60,13 @@ def abrir_janela():
     subjanela.geometry("600x400")
 
     botao = tk.Button(subjanela, text="pintor",
-                      command=lambda: escolher_trabalho("pintor"))
+                      command=lambda: escolher_trabalho("pintor",subjanela))
     botao.pack(padx=10, pady=10)
     botao = tk.Button(subjanela, text="físico",
-                      command=lambda: escolher_trabalho("físico"))
+                      command=lambda: escolher_trabalho("físico",subjanela))
     botao.pack(padx=10, pady=10)
     botao = tk.Button(subjanela, text="mecânico",
-                      command=lambda: escolher_trabalho("mecânico"))
+                      command=lambda: escolher_trabalho("mecânico",subjanela))
     botao.pack(padx=10, pady=10)
     atualizar_label()
     subjanela.mainloop()
